@@ -2,6 +2,7 @@
 	"id": "adlerluiz-ytmdesktop",
 	"name": "adlerluiz-ytmdesktop",
 	"shortname": "YTMDesktop",
+	"version": "1.0.1",
 	"description": "Interact with YTM Desktop (https://github.com/ytmdesktop/ytmdesktop)",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-adlerluiz-ytmdesktop.git",
