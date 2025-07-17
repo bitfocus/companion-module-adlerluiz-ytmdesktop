@@ -19,7 +19,7 @@
 		"entrypoint": "../dist/main.js"
 	},
 	"legacyIds": [],
-	"manufacturer": "Google",
+	"manufacturer": "adlerluiz",
 	"products": ["YouTube Music Desktop"],
 	"keywords": ["ytmdesktop", "youtube", "music", "desktop"]
 }
