@@ -2,7 +2,7 @@
 	"name": "companion-module-adlerluiz-ytmdesktop",
 	"main": "dist/main.js",
 	"type": "module",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"scripts": {
 		"postinstall": "husky",
 		"format": "prettier -w .",
