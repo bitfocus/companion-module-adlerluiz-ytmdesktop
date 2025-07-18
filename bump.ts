@@ -2,10 +2,11 @@ import * as fs from 'fs'
 import * as path from 'path'
 // eslint-disable-next-line n/no-unpublished-import
 import prompts from 'prompts'
+import { generateDocs } from './generateDocs.js'
 
 await (async () => {
 	const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
-
+	console.log(pkg.version)
 	const bump = await prompts({
 		type: 'select',
 		name: 'bump',
@@ -18,6 +19,8 @@ await (async () => {
 		],
 		initial: 0,
 	})
+
+	if (!bump.bump) return
 
 	pkg.version = pkg.version.split('.')
 	if (bump.bump === 'patch') {
@@ -33,7 +36,7 @@ await (async () => {
 		const custom = await prompts({
 			type: 'text',
 			name: 'custom',
-			message: 'Input custom version',
+			message: 'Input custom version (current: ' + pkg.version.join('.') + '):',
 
 			validate: (value) => {
 				const parts = value.split('.')
@@ -66,4 +69,15 @@ await (async () => {
 	fs.writeFileSync(path.join(__dirname, 'companion', 'manifest.json'), JSON.stringify(manifest, null, '\t'))
 
 	console.log(`Version bumped to ${pkg.version}`)
+
+	const shouldGenerateDocs = await prompts({
+		type: 'confirm',
+		name: 'shouldGenerateDocs',
+		message: 'Generate documentation?',
+		initial: true,
+	})
+
+	if (shouldGenerateDocs.shouldGenerateDocs) {
+		await generateDocs()
+	}
 })()

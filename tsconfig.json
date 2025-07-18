@@ -1,6 +1,6 @@
 {
 	"extends": "./tsconfig.build.json",
-	"include": ["src/**/*.ts", "bump.ts"],
+	"include": ["src/**/*.ts", "bump.ts", "generateDocs.ts"],
 	"exclude": ["node_modules/**"],
 	"compilerOptions": {
 		"types": ["jest", "node"],
