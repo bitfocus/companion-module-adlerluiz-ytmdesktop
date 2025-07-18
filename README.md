@@ -6,20 +6,20 @@ Interact with YTM Desktop (https://github.com/ytmdesktop/ytmdesktop)
 
 - Open the settings menu by clicking the cog icon in the top right corner
 
-![Settings cog](1.png)
+![Settings cog](/companion/1.png)
 
 - Open the "integrations" tab and ensure "Companion server" and "Enable companion authorization" are both checked
 
-![Proper settings](2.png)
+![Proper settings](/companion/2.png)
 
 - Go back to Companion and click "Save" or re-enable the connection.
 - A popup will appear asking you to authorize the connection.
 
-![Authorization popup](3.png)
+![Authorization popup](/companion/3.png)
 
 - You can check the code by hovering over the loading icon in Companion.
 
-![Code in companion](4.png)
+![Code in companion](/companion/4.png)
 
 - Click "Allow". The popup will close and you should see a green check in Companion.
 

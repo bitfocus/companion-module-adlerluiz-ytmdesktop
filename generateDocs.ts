@@ -24,7 +24,7 @@ export async function generateDocs(): Promise<void> {
 	}
 
 	fs.writeFileSync('README.md', final)
-	fs.writeFileSync('companion/HELP.md', final)
+	fs.writeFileSync('companion/HELP.md', final.replaceAll('](/companion/', ']('))
 
 	console.log('Documentation generated successfully!')
 }
