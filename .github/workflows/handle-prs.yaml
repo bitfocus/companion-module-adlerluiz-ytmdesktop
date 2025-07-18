@@ -19,12 +19,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.pull_request.number }}
           BODY: >
-            Hi! 👋 This repository is only used for releasing the package. All development is on a separate repository.
+            Hi @${{ github.event.pull_request.user.login }}! 
 
-            For issue tracking and active development, please visit the forked repository:
-            👉 [dandanthedev/companion-module-adlerluiz-ytmdesktop](https://github.com/dandanthedev/companion-module-adlerluiz-ytmdesktop)
+            This repository is only used for releasing the package. All development is on a separate repository.
 
-            Thank you for your interest!
+            For issue tracking and active development, please visit the forked repository [here](https://github.com/dandanthedev/companion-module-adlerluiz-ytmdesktop)
       - name: Close PR
         run: gh pr close "$NUMBER"
         env:
