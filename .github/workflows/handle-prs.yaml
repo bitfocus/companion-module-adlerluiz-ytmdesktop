@@ -1,0 +1,33 @@
+name: PR Handling
+
+on:
+    pull_request:
+        types: [opened]
+jobs:
+  comment_and_close:
+    name: Comment and close PR
+    if: github.repository == 'bitfocus/companion-module-adlerluiz-ytmdesktop'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Add comment
+        run: gh pr comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          BODY: >
+            Hi! 👋 This repository is only used for releasing the package. All development is on a separate repository.
+
+            For issue tracking and active development, please visit the forked repository:
+            👉 [dandanthedev/companion-module-adlerluiz-ytmdesktop](https://github.com/dandanthedev/companion-module-adlerluiz-ytmdesktop)
+
+            Thank you for your interest!
+      - name: Close PR
+        run: gh pr close "$NUMBER"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
