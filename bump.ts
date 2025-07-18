@@ -5,6 +5,8 @@ import prompts from 'prompts'
 import { generateDocs } from './generateDocs.js'
 import { execSync } from 'child_process'
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+
 await (async () => {
 	const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
 	console.log(pkg.version)
@@ -68,6 +70,8 @@ await (async () => {
 	const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, 'companion', 'manifest.json'), 'utf8'))
 	manifest.version = pkg.version
 	fs.writeFileSync(path.join(__dirname, 'companion', 'manifest.json'), JSON.stringify(manifest, null, '\t'))
+	manifest.version = pkg.version
+	fs.writeFileSync(path.join(__dirname, 'companion', 'manifest.json'), JSON.stringify(manifest, null, '\t'))
 
 	console.log(`Version bumped to ${pkg.version}`)
 
@@ -82,20 +86,20 @@ await (async () => {
 		await generateDocs()
 	}
 
-	const shouldPR = await prompts({
+	const shouldCommit = await prompts({
 		type: 'confirm',
-		name: 'shouldPR',
-		message: 'Create pull request?',
+		name: 'shouldCommit',
+		message: 'Commit and push changes?',
 		initial: true,
 	})
 
-	if (shouldPR.shouldPR) {
-		execSync('git add README.md companion/HELP.md companion/manifest.json package.json', { stdio: 'inherit' })
-		execSync(`git commit -m "Bump to ${pkg.version}"`, { stdio: 'inherit' })
-		execSync('git push', { stdio: 'inherit' })
+	if (shouldCommit.shouldCommit) {
+		execSync('git add README.md package.json companion/manifest.json')
+		execSync('git commit -m "Bump version to ' + pkg.version + '"')
+		execSync('git push')
+		console.log('Changes committed and pushed successfully!')
 		execSync(
-			`gh pr create --base main --head dev --label "release" --title "Release ${pkg.version}" --body "Release ${pkg.version}"`,
-			{ stdio: 'inherit' },
+			'xdg-open https://github.com/bitfocus/companion-module-adlerluiz-ytmdesktop/compare/main...dandanthedev:companion-module-adlerluiz-ytmdesktop:dev',
 		)
 	}
 })()
