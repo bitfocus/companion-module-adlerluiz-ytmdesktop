@@ -3,6 +3,7 @@ import * as path from 'path'
 // eslint-disable-next-line n/no-unpublished-import
 import prompts from 'prompts'
 import { generateDocs } from './generateDocs.js'
+import { execSync } from 'child_process'
 
 await (async () => {
 	const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
@@ -79,5 +80,22 @@ await (async () => {
 
 	if (shouldGenerateDocs.shouldGenerateDocs) {
 		await generateDocs()
+	}
+
+	const shouldPR = await prompts({
+		type: 'confirm',
+		name: 'shouldPR',
+		message: 'Create pull request?',
+		initial: true,
+	})
+
+	if (shouldPR.shouldPR) {
+		execSync('git add README.md companion/HELP.md companion/manifest.json package.json', { stdio: 'inherit' })
+		execSync(`git commit -m "Bump to ${pkg.version}"`, { stdio: 'inherit' })
+		execSync('git push', { stdio: 'inherit' })
+		execSync(
+			`gh pr create --base main --head dev --label "release" --title "Release ${pkg.version}" --body "Release ${pkg.version}"`,
+			{ stdio: 'inherit' },
+		)
 	}
 })()
