@@ -1,0 +1,13 @@
+name: Publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Makepad-fr/auto-release-on-version-bump-actionp@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-unchanged-version: 'true'
