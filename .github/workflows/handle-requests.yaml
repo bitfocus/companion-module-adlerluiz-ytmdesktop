@@ -1,0 +1,63 @@
+name: Issue and PR Handling
+
+on:
+    issues:
+        types: [opened]
+    pull_request:
+        types: [opened]
+
+jobs:
+  comment_and_close_issue:
+    name: Comment and close issue
+    if: github.event.issue.pull_request == null && github.repository == 'bitfocus/companion-module-adlerluiz-ytmdesktop'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Add comment
+        run: gh issue comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          BODY: >
+            Hi! 👋 This repository is only used for releasing the package. All development is on a separate repository.
+
+            For issue tracking and active development, please visit the forked repository:
+            👉 [dandanthedev/companion-module-adlerluiz-ytmdesktop](https://github.com/dandanthedev/companion-module-adlerluiz-ytmdesktop)
+
+            Thank you for your interest!
+      - name: Close issue
+        run: gh issue close "$NUMBER"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+  comment_and_close_pr:
+    name: Comment and close PR
+    if: github.event.issue.pull_request != null && github.repository == 'bitfocus/companion-module-adlerluiz-ytmdesktop'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Add comment
+        run: gh pr comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          BODY: >
+            Hi! 👋 This repository is only used for releasing the package. All development is on a separate repository.
+
+            For issue tracking and active development, please visit the forked repository:
+            👉 [dandanthedev/companion-module-adlerluiz-ytmdesktop](https://github.com/dandanthedev/companion-module-adlerluiz-ytmdesktop)
+
+            Thank you for your interest!
+      - name: Close PR
+        run: gh pr close "$NUMBER"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}n
