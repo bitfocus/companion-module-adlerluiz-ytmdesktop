@@ -129,20 +129,18 @@ export class ModuleInstance extends InstanceBase<ModuleConfig> {
 		const connected = await new Promise<boolean>((resolve, reject) => {
 			this.socket?.on('connect', () => {
 				this.log('info', 'Connected to socket')
+				this.updateStatus(InstanceStatus.Ok)
 				resolve(true)
 			})
 			this.socket?.on('connect_error', (err) => {
-				this.log('error', 'Socket connection error: ' + err.message)
-				reject(err)
+				if (err.message === 'Authentication not provided or invalid') {
+					reject(err)
+				}
 			})
-		}).catch(async (err) => {
-			if (err.message === 'Authentication not provided or invalid') {
-				this.log('error', 'Invalid token, requesting new token')
-				config.token = ''
-				await this.init(config)
-				return false
-			}
-			this.updateStatus(InstanceStatus.ConnectionFailure, 'Socket connection failed: ' + err.message)
+		}).catch(async () => {
+			this.log('error', 'Invalid token, requesting new token')
+			config.token = ''
+			await this.init(config)
 			return false
 		})
 
@@ -163,8 +161,6 @@ export class ModuleInstance extends InstanceBase<ModuleConfig> {
 			this.updateStatus(InstanceStatus.ConnectionFailure, 'Socket disconnected, attempting to reconnect')
 			await this.init(this.config)
 		})
-
-		this.updateStatus(InstanceStatus.Ok)
 
 		this.updateActions() // export actions
 		this.updateFeedbacks() // export feedbacks
